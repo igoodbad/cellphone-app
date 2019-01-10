@@ -1,0 +1,7 @@
+{
+  "name": "cellphone-app",
+  "short_name": "cellphone-app",
+  "description": "Simulation a cellphone",
+  "start_url": "/",
+  "display": "standalone"
+}

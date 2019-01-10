@@ -1,0 +1,115 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/batery-phone/batery-phone.html">
+<link rel="import" href="../../bower_components/player-phone/player-phone.html">
+<link rel="import" href="../../bower_components/changer-phone/changer-phone.html">
+
+<dom-module id="cellphone-app-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .cellphone {
+        position: absolute;
+        border: 0.1em solid black;
+        height: 500px;
+        width: 320px;
+        border-radius: 20px;
+        background-color: black;
+      }
+
+      .screen {
+        position: relative;
+        border: 0.1em solid black;
+        height: 92%;
+        width: 93%;
+        margin: 6% 3%;
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .notification-bar {
+        display: flex;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: 100%;
+        padding-bottom: 5px;
+        margin-bottom: 4px;
+        justify-content: flex-end;
+        align-items: flex-start
+      }
+
+      .notification-bar batery-phone {
+        display: block;
+        align-self: auto;
+        margin-right: 3px;
+        margin-top: 3px;
+      }
+
+      .notification-bar changer-phone {
+        display: block;
+        align-self: auto;
+        margin-right: 3px;
+        margin-top: 3px;
+      }
+    </style>
+    <div class="cellphone">
+      <div class="screen">
+        <div class="notification-bar">
+          <changer-phone></changer-phone>
+          <batery-phone></batery-phone>
+        </div>
+        <div class="content-application">
+          <player-phone video-source="src/media/Slow Dance With You.mp4" ></player-phone>
+        </div>
+        <div class="action-bar">
+
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CellphoneAppApp extends Polymer.Element {
+      static get is() { return 'cellphone-app-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'cellphone-app-app'
+          }
+        };
+      }
+      
+      ready(){
+        super.ready();
+        this._prepareElements();
+      }
+
+      _prepareElements(){
+        const batery = this.shadowRoot.querySelector("batery-phone");
+        const player = this.shadowRoot.querySelector("player-phone");
+        const changer = this.shadowRoot.querySelector("changer-phone");
+        player.addEventListener("detail-play", event => {
+          batery.sizeSong = event.detail.duration;
+        });
+        player.addEventListener("status-play", event => {
+          batery.values = event.detail;
+        });
+        player.addEventListener("end-play", event => {
+          console.log(event.detail);
+        });
+        changer.addEventListener("changeStatus", event => {
+          batery.chargin = event.detail;
+        })
+      }
+    }
+
+    window.customElements.define(CellphoneAppApp.is, CellphoneAppApp);
+  </script>
+</dom-module>
